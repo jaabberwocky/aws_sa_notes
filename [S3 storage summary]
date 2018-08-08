@@ -1,0 +1,88 @@
+[S3 storage summary]
+
+- S3 is object based, allows you to upload files
+- Files can be from 0B to 5TB
+- Unlimited storage
+- All files stored in buckets (just like folders)
+- Buckets have universal namespace, names must be unique globally, all lower-case
+- https://s3-<<region>>.amazonaws.com/<<bucketname>>
+
+= Consistency Model =
+- read after write consistency for PUTS of new objects
+- eventual consistency for overwrite PUTS and DELETES.. if you update an obj or delete in S3, can take abit of time to propagate
+
+= Storage Tiers=
+1. Storage Standard: 99.99% availability, 99.99999999% durability, stored redundantly across multiple devices, and is designed to sustain the loss of 2 fac concurrently
+2. S3 - IA: for data that is accessed less frequently, but requires rapid acess when needed. lower fee than S3, but you are charged a retrieval fee.
+3. S3 one zone - IA: want a lower cost option for infrequently accessed data, and do not require multiple AZ data resilience [same as S3 IA.. RRS]
+4. Glacier - very cheap, but used for archival, expedited, standard or bulk, standard retrieval time takes 3 to 5 hours
+
+= Core fundamentals of S3 =
+- key (name)
+- value (data)
+- so key:value store
+- version ID << versioning
+- metadata
+- ACLs
+- NOT suitable to install an OS on, object-based storage only (for files)
+
+- allows versioning (including all writes and even if you delete an obj)
+	- you pay for EACH version, as it's all backed up
+- great backup tool
+- once enabled, versioning cannot be disabled, only suspended!
+- integrates with lifecycle rules
+- versioning's MFA delete capability, must auth with MFA to provide an additional layer of security
+- cross-region replication: requires versioning on source and destination bucket
+
+- life cycle management: can be used with versioning or completely indepdent
+- can be applied to all current and prev versioons
+- following actions can be done:
+	- transation to Standard IA (128kb and 30 days after creation date)
+	- archive to glacier storage (30 days after IA, if relevant)
+	- permanently delete also
+
+= Cloudfront =
+-Edge location - location where content will be cahced, separate to AWS region/AZ
+-Origin - origin of all files that the CDN will distribute, can be S3 bucket, ec2 instance an Elastic Load Balancer or Route53
+- distribution:
+	- web distribution for webistes
+	- rtmp for media streaming
+- edge locations are not just READ only, can write to them too, will replicate to origin
+- objects are cached for the life of TTL (time to live, default:24hours)
+- you can clear cached objects, but you will be charged for it
+
+= Securing your buckets =
+- by default all buckets are private and everything is private
+- setup access:
+	1. bucket policies
+	2. access control lists
+- s3 buckets can be configured to create access logs whcih log all requests made to the s3 bucket. this can be done to another bucket.
+- encryption:
+	- in transit: SSL/TLS (have to use HTTPS to connect in)
+	- at rest:
+		1. server side: S3 managed keyes (SSE-S3)
+		2. AWS key management service, managed keys (SSE-KMS, similar... but with adtl benefits and costs) (SSE-KMS) << allows audit trail to who used your key
+		3. Server Side Encryption with Customer Provide Keys (SSE-C) << you provide the keys yourself
+	- client side encryption: encrypt on client side before uploading
+
+- File Gateway: for flat files stored directly on S3
+- Volume Gateway: 
+	- stored volumes: entire dataset is stored on site and is async backed up to S3
+	- cached volumes: entire dataset stored on S3, and most freq access is cached on Site
+- Gateway Virtual Tape Library (VTL)
+	-used for backup and uses popular backup applications like Netbackup...
+
+= Snowball =
+Snowball : pure storage, 50TB is the starting size
+Snowball Edge : has compute capabilities on top of storage, mini version of AWS datacenter
+Snowmobile: 100PB worth of storage, 45ft container. come with armed protection. 
+
+- can import/export to/from S3
+
+can use S3 transfer acceleration, speed up transfers to S3 using S3 transfer acceleration
+
+- use s3 to host static websites, scales automatically, very cheap
+
+- write to S3, you get a http 200 success code for successful write. load files to s3 much faster by enabling mutlipart upload.
+
+- READ S3 FAQ!!!

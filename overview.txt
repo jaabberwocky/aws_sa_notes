@@ -1,0 +1,68 @@
+AWS SA course notes
+
+[Security and Identity and Compliance]
+Shield - prevent DDOS attacks
+Artifact - service organisation control (SOC), PCI reports, a way of downloading and inspecting AWS documentation
+Security need to know: IAM, Inspector, CloudHSM, WAF, Shield, Certificate Manager
+
+[Mobile services]
+Mobile hub- setup aws services for you, generates cloud config file. use mobile SDK to connect apk backend to this
+pinpoint - targeted push notifications to drive engagement for app users.
+aws app sync - brand new svc, reinvent 2017, updaes web and app in real time, updates for users as soon as they connect
+
+*none of them relevant for exams
+
+[AR/VR]
+Sumerian - general release name. first ever language written down in the world. still in preview.
+
+[application integration]
+step functions - manage lambda functions and steps
+amazon mq - do messsage queues, similar to rabbitmq * does not feature
+SNS/SQS/SWF - very old.. SQS is oldest service, launched in 2006. features heavily in SA exam. 
+SNS - notification service.
+SQS - decoupling your infrastructure. 
+SWF - uses in warehouses, every time you order a package, it creates a Simple Work Flow. 
+
+[customer engagement]
+Connect - contact as a service, your own call center. do service configuration, do this at any scale. 
+Simple Email Service - great way of sending large amount of emails. very cost-effective. SES can come up in SA.
+
+[biz productivity]
+Alexa for Business - you can bascially use it to dial into meeting, use it to inform IT printer is broken. does a whole bunch of svc, not in exam.
+Chime - like google hangouts meeting, use it for videoconferencing.
+Work Docs - essentially like dropbox for AWS. safely and securely storing work related documents * will come up with SA
+WorkMail - sort of like Office365,great way for using email through amazon. like google email.
+
+[Desktop and App Streaming]
+Workspaces - actual desktop env running in cloud, but running on your device
+AppStream 2.0 - use it to stream any running applications. only AWS svc that has a version number
+* not featured
+
+[IOT]
+huge at RI 2016.
+iOT device management - use it to manage iot devices
+amazon freertos - free os for microcontrollers
+greengrass - software to run local compute, and ML... in a secure way.
+
+[game development]
+gamelift - a svc to help develop games, could be anything 
+
+
+--- dont freak out ---
+desktop and app streaming
+application integration
+security
+analytics
+management tools
+migration
+compute 
+networking and content delivery
+storage
+databases
+
+take this:
+s3, dynamo db and application integration and analytics
+
+after passing solutions architect
+
+

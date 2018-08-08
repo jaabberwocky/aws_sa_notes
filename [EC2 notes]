@@ -1,0 +1,166 @@
+[EC2 notes]
+
+EC2 - Elastic Compute Cloud, web service that provides resizable compute capacity in the cloud. reduces the time required to obtain and boot new server instances to minutes, allowing you to quickly scale capacity, both up and down, as your computing requirements change.
+
+- changes the economics of computing by allowing you to pay only for capacity that you actually use
+- provides developers the tools to build failure resilient applications and isolate themselves from common failure scenarios
+- depending on billing methods, pay by hour or by second
+
+=pricing options=
+1. on demand - allows you to pay a fixed rate by the hour (or by the second) with no commitment
+- perfect for users that want low cost and flex of AWS
+- apps with short term or spiky, unpredictable workloads
+- applications being developed or tested on amazon ec2 for the first time
+
+2. reserved - provides you with a capacity reservation, and offer a significant discount on the hourly charge for an instance, 1 year or 3 year terms
+- steady state, or predictable usage
+- require reserve capacity
+- make up-front payments to reduce their total computing costs even further
+- types:
+	- Standard RIs (up to 75% off on-demand)
+	- Convertible RIs (up to 54% off on-demand): feature the capability to change the attributes of the RI (e.g. go from very CPU-intensive to RAM-intensive instance)
+	- Scheduled RIs: available to launch within the time window you reserve. allows you to match your capacity resrvation to a predictable day/time
+
+3. spot - enables you to bid whatever price you want for instance capacity, providing for even greater savings if your applications have flexible start and end times.
+- applications have start and end times
+- only feasible at very low compute prices
+- like genomics researchers to use it at sunday 4am where no-one else is using
+- users for great capacity for need
+
+4. dedicated hosts - physical ec2 server dedicated for your use. can help reduce costs by allowing you to use existing server-bound software license
+- useful for regulatory requirements that may not support multi-tenant virtualization
+- great for licensing which does not support multi-tenacy or cloud deployments
+- can be purchased on-demand (hourly)
+
+
+ =ec2 instance types=
+ * no need to memorize for ec2 instance types
+
+ t2: lowest cost general purpose computing availability (what we used for free tier)
+ the number is the generation, t2 > t1
+
+F FPGA
+I IOPS
+G Graphics
+H High Disk Throughput
+T t2.micro cheap general purpose
+D Density
+R RAM
+M Main choice
+C Compute
+
+FIGHTDRMC
+
+
+= images =
+you can create an AMI image from a snapshot... then copy it over to another region. you should always stop a running AMI to create its snapshot. the root device volume will be encrypted this way. you must use hardware-assisted virtualization to launch t2. you can share snapshots but only if they are unencrypted.
+
+use -case : setup a server exactly the way you want, then create a snapshot of it to replicate it.
+
+
+
+
+
+P Graphics (think pics)
+X Extreme Memory
+
+= EBS (Elastic Block Storage) =
+Allows you to create storage volumes and attach them to amazon ec2 isntances. once attached you can create a file system on top of these volumes, run a database etc. Amazon EBS vols are placed in a specific Availability Zone, where they are automatically replicated to protect you from the failure of a single component
+
+> EBS volume types
+1. General Purpose SSD (GP2)
+	- general purposes, balances both price and performance
+	- ratio of 3 IOPS per GB with up to 10,000 IOPS ant the ability to burst up to 3000 IOPS for extended periods of time for volumes at 3334 GiB and above
+2. provisioned IOPS SSD (IO1)
+	- designed for I/O intensive applications such as large relational or NOSQL
+	- use if you need more 10,000 IOPS
+3. throughput optimised HDD (ST1)
+	- big data
+	- data warehouses
+	- log processing
+	- cannot be a boot volume
+4. cold HDD (sc1)
+	- lowest cost storage for infreq accessed workloads
+	- cannot be boot volume
+5. magnetic (standard)
+	- lowest cost per GB of all EBS volume types
+	- good if data is accessed infreq
+
+= launch ec 2 instance lab =
+
+[security groups]
+- 1 subnet = 1 AZ
+- any changes to security group is IMMEDIATE
+- security groups are STATEFUL > anything allowed in will be allowed out, even if all outbound rules are removed
+- all inbound traffic is blocked by default
+- all outbound traffic is allowed by default
+- you can have any number of ec2 in SG
+- you can have multiple SG attached to EC2 instances
+
+[EBS volume]
+- EBS and EC2 instance must be in the same AZ
+- which is root device ... look at GP2 
+- create snapshot to migrate across AZ, can you copy the snapshot to another region
+
+
+= AMI types =
+either backed by EBS or instance-based store (ephemeral storage)
+
+you can select based on:
+1. region
+2. operating system
+3. architecture (x86 or x64)
+4. launch permissions
+5. storage for the root device (root device volume)
+	- instance store ( ephemeral storage)
+	- EBS-backed storage
+
+
+>> instance vs EBS
+- you can reboot or terminate ONLY with instance-store, but with EBS you can start/stop also
+- you cant restart and move it to another virtualization in the AZ, less durability for instance
+- you would lose your virtual machine if the host fails
+
+for ebs volumes: root device is an EBS vol created from an Amazon EBS snapshot
+for instance: root device for instance is created from a template stored in Amazon S3 (so can take longer)
+
+// exam tips
+1. instance store sometimes called ephemeral
+2. instance store cannot be stopped, if underlying host fails, you lose all data
+3. EBS backed can be stopped, will not lose data if it is stopped
+4. can reboot both, you will not lose data
+5. by default, both root volumes will be deleted on termination, however with EBS vol, you can tell AWS to keep the root device volume
+
+
+= Elastic Load Balancer =
+simply a virtual appliance, to balance the load across a bunch of web servers. dont get one server that is overwhelmed.
+
+3 types:
+1. application
+	- are best suited for load balancing of HTTP and HTTPS traffic.
+	- operate at Layer 7
+	- are application-aware
+	- are intelligent, and can create advanced request routing, sending specified requests to specific web servers
+2. network
+	- best suited for TCP traffic where extreme performance is required
+	- operating at the connection level (Layer 4)
+	- are capable of handling millions of requests per second, while maintaining lower latency speeds
+3. classic
+	- legacy elastic load balancers
+	- can load balance HTTP/HTTPS and use Layer 7-specific features (e.g. X-Forwarded, sticky sessions)
+	- Can also use strict Layer 4 load balancing for applications that rely purely on TCP
+
+>> Load Balancer Errors:
+* if application stops responding, ELB will respond with 504 error
+	- means application is having issues, could be at Web Server layer or at Database layer
+
+>> X-Forwarded-For Header
+- EC2 instances gets the public IPV4 address from the ELB
+
+// exam tips
+- 504 error means the gateway has timed out, means application not responding within the idle timeout period
+- if you need IPv4 address of your end user, look for it in X-Forwarded-For header
+- health checks: by talking to site
+
+
+

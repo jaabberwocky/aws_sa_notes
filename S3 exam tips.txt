@@ -1,0 +1,112 @@
+[S3 versioning exam tips]
+
+stores all versions of an object
+great backup tool
+once enabled, cannot be disabled, only suspended,
+integrates with lifecycle rules
+versioning's MFA delete capability
+
+[cross region replication]
+
+versioninig must be enabled
+regions must be unique
+files in existing bucket are not replicated automatically
+you cannot replicate to multiple buckets or use daisy chaining this time
+delete markers are replicated
+deleting individual versions or delete markers will not be replicated
+understand what cross region replication is at at high level
+
+[life cycle management]
+
+canbe used in conjunction with versioning
+applied to current and previous versions
+following actions can be done:
+	transation to standard - IA
+	archive to glacier storage class
+	permanently delete obj
+
+[What is CDN]
+
+CDN (content delivery network) is a system of distributed servers (network) that deliver webpages and other web content to a user based on geographic locations of the user, origin of webpage, and a content delivery server
+
+edge location - location where content can be cached, separate from AWS region/AZ, are all around the world now
+origin - origin of files
+distribution - name given to the CDN which consists of edge locations
+
+= exam tips=
+edge location - where content cached 
+origin - origin of all files, s3 bucket, ec2 instance, ELB or route53, can be non-AWS
+distribution - name given to the CDN, consists of a collection of edge locations
+	web distributions - used for websites
+	RTMP - used for media streaming
+not just used for read, can be used for write. can be sent to the origin server.
+objs are cached for life of the TTL (time to live)
+you can clear cached obj, but you will be charged for it
+
+[security and encryption]
+by default, all buckets are private
+setup access control using:
+	- bucket policies
+	- access control lists
+s3 buckets can be configured to create access logs... can be done to another bucket
+
+- encryption -
+1. in transit
+	sending to and from the bucket, secured using SSL/TLS (TLS is replacement to SSL)
+	using HTTPS
+2. at rest
+	server side encryption:
+		- s3 managed keys SSE-S3, each obj encrypted a key (AES256 encryption) [SSE-S3]
+	server side encryption with Key Management Service (SSE-KMS):
+		- similar to above, but have more adv
+		- added protection to unauthorised access
+	server side encryption with customer provide keys (SSE-C):
+		- management is done by you
+	client side encryption:
+		- encrypt data on client side, then upload to S3
+
+[Storage Gateway]
+is a service that connects an on-premise software applications with cloud-based storage to provide seamless and secure integration between an org on-premises IT env and AWS' storage infrastructure. It's essentialy a virtual image... that connects to your cloud. Can connect to cloud through: Direct Connect, Internet, Amazon VPC
+
+install it as a virtual machine image.... pushes the data upwards to the cloud
+
+four types of storage gateway
+	1. File Gateways (NFS), used for files, directly stored on S3
+	2. Volumes Gateway (iSCSI) - block-based storage, virtual harddisk for blocks, not for flat files. not on S3
+		- Stored Volumes: store entire copy of data on-premise
+		- Cached Volumes: only latest data
+	3. Tape Gateway (VTL): backup and archival data...use lifecycle maangement then
+
+=File Gateway=
+most unlikely to come up as newest. files are stored as objects in s3. accessed through a Network File System (NFS).
+
+[Snowball]
+started from import/export disk to acceleate moving large amounts of data into and out of AWS cloud using portable storage. At ReINVENT 2015, AWS released snowball
+
+types:
+- snowball
+- snowball edge
+- snowmobile
+
+>> snowball
+petabyte-scale data transport solution. address commmon challenges with large-scale data. 80TB snowball in all regions. Once the data transfer job has been processed and verified, AWS performs a software erasures of the Snowball appliance. 256 AES encryption on them. 
+
+>> snowball edge
+100 TB data transfer device, has onboard storage and compute capabilities. it's a small portable AWS data centers. can run lambda functions off them. 
+
+>> snowmobile
+massive sea container off the back of a huge truck. petabyte and exabyte scale data transfer. 100 petabytes per snowmobile. makes it easy to move massive volumes of data. 
+
+== exam tips ==
+- understand whta snowball is
+- understand what import/export is
+- Snowball can: import to S3, export from S3
+- move glacier to S3, then move to snowball
+
+
+[s3 transfer acceleration]
+uses cloudfront edge network to accelerate your upload to s3. you will get a distinct URL to upload to.
+
+
+[s3 host static website]
+website url format: http://<<bucketname>>.s3-website-<<location>>.amazonaws.com
