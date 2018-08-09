@@ -1,0 +1,175 @@
+= Overview =
+Learnt alot about:
+	- EC2 instances
+	- pricing
+	- Serverless
+	- Load balancers
+	- Auto scaling group
+
+Know differences in pricing:
+	- on demand
+	- spot (if spot > bid, then instances will terminate)
+	- Reserved (reserve capacity, run from 12mths to 36mths, more pay out, more discount)
+	- Dedicated hosts (for licensing, or for regulatory environments where you need physical separation)
+
+Remember with spot instances:
+	- if you termiante the instance, you pay for the hour
+	- if AWS termiantes, you get the hour it was terminated in for free
+
+= Instance Types =
+
+Families:
+	- F1
+		\ field programmable gate array
+		\ genomics research, financial analytics, big data
+	- I3
+		\ high speed storage
+		\ nosql DBs, DWH
+	- G3
+		\ Graphics Intensive
+	- H1
+		\ high disk throughput
+		\ mapreduce based workloads, distributed file systems
+	- T2
+		\ lowest cost, general purpose
+	- D2
+		\ dense storage
+		\ file servers
+	- R4
+		\ memory optimised
+		\ memory intensive apps/DBs
+	- M5
+		\ general purpose
+		\ application servers
+	- C5
+		\ compute optimised
+		\ CPU intensive apps/DBs
+	- P3
+		\ graphics & general purpose GPU
+		\ machine learning, bit coin
+	- X1
+		\ mem optimised
+		\ SAP HANA || Apache Spark etc
+
+Picture Edward Norton who wants to get into fight Donald Duck!!!
+
+FIGHTDRMCPX
+
+= EBS =
+Elastic Block Storage
+
+EBS consists of:
+	- SSD, general purpose - GP2 (up to 10,000 IOPS)
+	- SSD, provisioned IOPS - IO1 (> 10,000 IOPS)
+	- HDD, throughput optimised - ST1 - freq. accessed workloads
+	- HDD, Cold - SC1 - less freq. accessed workloads
+	- HDD, Magnetic - Standard - cheap, infreq. accessed storage
+
+remember boot volumes can only be SSD or HDD magnetic standard.
+Remember you cant mount 1 EBS vol to multiple EC2 instances, instead use EFS.
+
+= EC2 Lab =
+
+- Termination protection is turned off by default, must turn on
+	- on EBS-backed instance, the default action is for the root EBS vol to be deleted when the instance is terminated
+- EBS-backed Root can now be encrypted using AWS API or console to encrypt the boot volume, can also use 3rd party tools such as bit locker to encrypt the root
+	- additional volumes can be encrypted
+
+= vol vs snapshots =
+
+- Volumes exist on EBS:
+	- virtual HD
+- snapshots exist on S#
+- you can take a snapshot of a volume, this will store that volume on S3
+- snapshots are point in time copies of volumes
+- snapshots are incremental, means that only the blocks that have changed since your last snapshot are moved to S3
+- if this is your first snapshot, may take some time to create as many files are being moved
+- snapshots of encrypted vols are encrypted automatically
+- vols restored from encrypted are encrypted automatically
+- you can share snapshots, but only if they are unencrypted
+	- can be shared with other AWS accounts
+
+- to create snapshot for EBS root, should stop the instance before taking snapshot
+- instance store volumes are sometimes called Ephemeral Storage
+- instance store volumes cannot be stopped, if the underlying host fails, you will lose your data
+- EBS backed instances can be stopped, you will not lose the data if stopped
+- you can reboot both, will not lose ata
+- by default, both ROOT volumes deleted on termination, but if you use EBS, you can tell AWS to keep the root device vol if EBS-backed
+
+
+= take snapshot of RAID array =
+
+- problem: snapshots only take "image" of the disk, and not things in cache, which is problem with RAID arrays
+- stop application from writing to disk
+- flush all caches to disk
+- freeze the file system
+- unmount the RAID array
+- stop EC2 instances
+
+= Amazon Machine Images =
+
+- AMIs are regional
+- can only launch AMI from the region in which it is stored
+- can copy AMIs to other regions using console, CLI or EC2 api
+
+
+= Monitoring =
+
+- Standard monitoring = 5 min
+- Detailed monitoring = 1 min (cost more)
+
+Cloudwatch is for performance monitoring
+cloudtrail is for auditing
+
+
+= Cloudwatch =
+
+- Dashboards : create awesome dashboards to see what is happening
+- Alarms: allow you to set alarms that notify you when particular thresholds arehit
+- Events: cloudwatch events helps you to respond to state changes in your AWS resources
+- Logs: help you to aggregate, monitor and store logs
+
+
+= Roles =
+
+- FAR more secure than storing access key and secretkey on individual EC2 instances
+- roles are easier to manage
+- roles can be assigned to ec2 instance after it has been provisioned using both CLI and aws console (used to be only at creation)
+- roles are universal, can use them in any region
+
+
+= Instance meta-data =
+
+- used to get info about an instance (such as public api)
+- curl http://169.254.169.254/latest/meta-data
+
+
+= EFS features =
+
+- supports NFSv4 protocol
+- only pay for storage you use
+- can scale up to PB
+- can support thousands of concurrent NFS connections
+- great for fileserver
+- data is tored across multiple AZs within a region
+- read after write consistency
+
+
+= Lambda =
+
+compute servie to upload code, takes care of provisioning and managing the servers. event-driven compute service where AWS lambda runs your code in response to events
+
+as an compute service to run your code in response to HTTP requests using amazon api gateway or API calls made during amazon sdk
+
+
+= placement groups =
+
+- two types of placement:
+	- clustered placement group (think of this as default): used for big data
+	- spread placement group: used to keep your critical ec2 instances to guaranteeing that they are on diff physical hardware
+
+
+
+
+
+
