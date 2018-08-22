@@ -1,0 +1,26 @@
+[Route53 Summary]
+
+DNS Exam tips!
+
+- load balancer cannot have IPv4 address, only DNS name
+- understand difference between alias record and CNAME
+- given the choice, always choose alias record over CNAME
+
+= Routing Policies =
+
+1. Simple Routing policy
+	- nothing special, just goes to where it is
+	- stupid round robin
+
+2. Weighted
+	- A/B testing, 80% 20% etc
+ 
+3. Latency
+	- based on latency to end user
+	- get quickest performance
+
+4. Failover
+	- backup site only comes online when primary fails health check
+
+5. Geolocation
+	- based on where the users are geographically located

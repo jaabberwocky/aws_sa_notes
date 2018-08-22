@@ -1,0 +1,53 @@
+[Databases Summary]
+
+RDS - OLTP
+	- SQL Server
+	- MySQL
+	- Postgres
+	- Oracle
+	- Aurora
+	- MariaDB
+
+DynamoDB - NoSQL
+RedShift - OLAP (DWH)
+Elasticache - in memory caching
+	- memcached
+	- redis
+
+= RDS =
+Difference between Multi-AZ and Read Replicas
+	- Multi-AZ will automatically sync to another RDS instance in another AZ
+	- automatic failover for multi-az
+
+	- read replica: if application does alot of reads, they can read off the read replicas
+	- can have up to 5 read replicas
+
+Aurora
+	- 2 copies of data contained in each AZ, min of 3 AZ, 6 copies of your data
+	- designed to transparently handle the loss of up to two copies of your data
+	- self-healing
+	- 2 types of replicas:
+		- Aurora replicas (up t0 15)
+		- MySQL read replicas (up to 5)
+
+= DynamoDB =
+	- push button scaling : scale on the fly without downtime; RDS not so easy
+	- noSQL, key-value pairs
+	- stored on SSD storage
+	- 2 types of consistency
+		- eventual consistent reads (default)
+			= when the data is not immediately consistent right after read (< 1 seconds)
+		- strongly consistent reads
+
+= RedShift DWH =
+- single node (160 GB)
+- multi nodes
+	- leader node
+	- compute nodes (up to 128 in num)
+
+= Elasticache =
+	- fast in memory
+	- cache popular data to be read all the time
+	- 2 types of engines:
+		- memcached
+		- redis
