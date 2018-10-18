@@ -1,0 +1,55 @@
+[Application Services Summary]
+
+1. SQS (Simple Queue Service)
+
+Web service that gives you access to a message queue that can be used to store messages while waiting for a computer to process them
+
+SQS must be polled, it's a pull-based mechanism.
+
+User -> SQS <-> Lambda that processes requests (polls SQS)
+
+- pull based, not pushed
+- messages are 256kb in size
+- msgs can be kept in queue from 1 min to 14 days, default is 4 days
+- visibility time out is the amount of time that the message is invisible in SQS after a reader picks up that message. provided that job is PROCESSED before this time out, it will be deleted. if it is not processed before this time out, then the message will become visible again and another reader will process it. this can lead to duplication.
+- visibility time out max is 12 hours
+- guarantees that msg will be processed at least once
+- amazon sqs long polling is a way to retrieve messages from your amazon SQS queues.long polling doesnt return a response until a message arrivces in the message queue.
+- queue can either be standard (default, no guarantee of order) or FIFO (ordered)
+
+
+2. SWF (Simple Workflow Service)
+
+Differences with SQS:
+- SQS has retention period of 14 days, SWF with 1 year
+- SWF presents a task-oriented API, whereas SQS offers a message-oriented API
+	- can be used with human processes in between with SWF
+	- such as amazon delivery logistics
+- SWF ensures that task is assigned only once, SQS must handle with duplicates possibly
+- SWF keeps track of all tasks and events, SQS must implement it by yourself
+
+SWF Actors:
+- Workflow Starters - an application that can initiate or start a workflow (e.g. e-commerce site)
+- Deciders - controls flow of activity tasks in a workflow execution, if something has finished, Decider decides what to do next (e.g. if-then-else decider in your app logic)
+- Activity Workers - goes in and carries out the activity tasks
+	- could be humans! doesn't have to be EC2 or any tech-related
+
+
+3. SNS (Simple Notification Service)
+
+Pub-sub model
+
+Protocol Types:
+- Http
+- HTTPS
+- Email
+- Email-JSON
+- SQS
+- Application
+- Lambda
+
+SNS vs SQS:
+- both message services in AWS
+
+
+
