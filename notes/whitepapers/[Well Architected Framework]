@@ -1,0 +1,69 @@
+[Well Architeced Framework Whitepaper]
+
+Released at re:Invent 2015. By werner vogels. Developed by Solutions Architecture team based on their experience helping AWS customers. Well architected framework is a set of questions that you can use to evaluate how well your architecture is aligned to AWS best practices.
+
+Based on 5 pillars of the well-architected framework.
+1. Security
+2. Reliability
+3. Performance Efficiency
+4. Cost optimisation
+5. Operational excellence
+
+Structure of each pillar:
+- design principles
+- definition
+- best practices
+- key aws services
+- resources (read up on more)
+
+General design principles:
+1. stop guessing your capacity needs
+	- make capacity decision 
+	- can scale automatically to meet demand
+2. test systems at production scale
+	- can create production-scale test environment on demand
+	- do that using cloudformation
+	- then tear it down
+3. automate to make experimentation easier
+	- use cloudformation to try new things
+	- add/remove resources to see what effect that has
+	- allows you to replicate services at a low cost
+4. allow for evolutionary architecture
+	- traditional: one time event, never really changes after a long time
+5. data-driven architecture
+	- can collect data on how architectural decisions have affected workflow
+	- can make objective decisions on making improvements
+6. improve through game days
+	- schedule game days to simulate events in production
+	- stand up a copy of your prod environment, then load test, make sure it doesn't fall over
+
+
+= Security Pillar =
+
+Design principles
+- apply security at all layers
+- enable traceability
+	- should be able to trace how hackers entering
+- automate responses to security events
+	- what if someone is trying to brute force into SSH (22)
+- focus on securing your system
+	- links to shared responsibility model
+- automate security best practices
+	- take a base image like Amazon AMI, then harden it
+	- institutions have guide on hardening your OS
+
+Shared responsibility mode
+- what is customer responsible for:
+	- data
+	- OS, network, firewall config
+	- applications
+	- data encryption
+- aws:
+	- AWS global infra
+	- compute, storage, database and networking
+
+definition
+- security consists of 4 areas:
+	- data protection
+	- privilege management
+	- infra protection
