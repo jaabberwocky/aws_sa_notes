@@ -1,0 +1,60 @@
+[Architecting for the Cloud Best Practices]
+
+Note: this is based off ACG's lecture. Video AND whitepaper have not been updated since 2016, so bear that in mind.
+
+This is one out of two papers which are required reading for the exam. The second one is AWS Well-Architected whitepaper.
+
+
+= Business benefits of the cloud =
+1. almost zero upfront infra investment
+2. just-in-time infra so no outage due to no gear
+3. more efficient res utilisation
+4. usage-based costing, no 3 month, 3 year etc money locked in
+5. reduced time to market - no need to provision and buy very expensive equipment to get things running
+
+= technical benefits of the cloud =
+1. automation - "scriptable infrastructure"
+	- infra architects are slowly dying
+	- have to script architecture
+2. auto-scaling
+3. proactive-scaling
+4. more efficient development lifecycle - CI/CD pipelines
+	- software release cycle can be every hour
+	- traditionally, released every few months
+5. improved testability
+	- provision test env
+6. disaster recovery and business continuity
+	- e.g. failover using route 53
+7. "overflow" the traffic to the cloud
+	- add to inhouse load balancers
+
+= design for failure =
+rule of thumb: best pessimist when designing in cloud, assume things will fail. always design, implement and deploy for automated recovery from failure.
+
+assume hw failure, high traffic, think of recovery strategies.
+
+netflix does this better than anything: chaos engineering.
+
+
+= decouple your components=
+think of SQS. 
+
+build components that do not have tight dependencies on each other. the other components are built so that work continues even if some component fails. 
+
+
+= implement elasticity =
+can be implemented in 3 ways:
+
+1. proactive cycling scaling: periodic scaling that occurs at fixed interval (daily, weekly, monthly, quarterly)
+	- e.g. every christmas sales goes up, and thus demand goes up. so provision more resources for it
+2. proactive event-based scaling: scaling when you're expecting a big surge of traffic requests
+3. autoscaling based on demand: by using monitoring service, your system can send triggers to take appropriate actions (e.g. CPU utilisation)
+
+
+= secure your applications =
+differnet security models based on what's needed. 
+
+web layer (open to 80 and 443)
+app layer (only permit web layer, SSH (22) access to only developers in office)
+DB layer (only permit app layer to speak to it, all other access denied)
+
