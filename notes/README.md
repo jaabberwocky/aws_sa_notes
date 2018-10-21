@@ -1,6 +1,6 @@
-## Revision Plan ##
+# Revision Plan 
 
-# Order
+### Order
 
 1. Complete all ACG videos
 2. Read necessary whitepapers
@@ -8,3 +8,6 @@
 2b. Read important FAQs (e.g. S3, VPC, EC2)
 3. Practice (udemy)
 4. Practice (whizzlabs)
+
+### Test date
+22 Nov
