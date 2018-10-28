@@ -35,8 +35,9 @@ General design principles:
 	- can make objective decisions on making improvements
 6. improve through game days
 	- schedule game days to simulate events in production
-	- stand up a copy of your prod environment, then load test, make sure it doesn't fall over
+	- stand up a copy of your prod environment, then load test, make usre it doesn't fall over
 
+--------------------------------------------------------------------------------
 
 = Security Pillar =
 
@@ -67,3 +68,401 @@ definition
 	- data protection
 	- privilege management
 	- infra protection
+	- detective controls
+
+(Data Protection)
+	- basic data classification should be in place before begin to architect security practices
+	- should organise and classify your data in segments (e.g. publicly available, available to certain members of org)
+	- implement a least privilege access systems
+	- data encrypted at rest or in transit
+
+best practices:
+	- AWS customers maintain full control over data
+	- makes it easy to encrypt and manage keys, and use KMS
+	- detailed logging is available that contains important content, such as file access and changes
+	- AWS has designed storage systems for exceptional resiliency (e.g. 11 nines durability, 99.999999999 etc %)
+	- Versioning of data (on S3 for example) => protect against accidental overwrites
+	- AWS never initiaes movement of data between regions, unless customer explicitly enable a feature or leverages a service that provides that functionality
+
+(Privilege management)
+	- ensures that only authorised and authed users able to access your resources
+
+questions:
+	- how are you protecting access to and use of AWS root account (e.g. MFA)?
+	- how are you defining roles and responsibilites of system users to control human access to the AWS management console and APIs?
+	- how are you limiting automated access (such as from applications, scripts or third party tools or services) to AWS resources?
+	- how are you managing keys?
+
+(infra protection)
+	- outside of cloud, how to protect your data centre. RFID controls, lockable cabinets, CCTV etc. within AWS they handle thism so really infra protection exists at a VPC level.
+
+questions:
+	- how are you enforcing network and host-level boundary protection?
+		- use both NACLs and SGs
+		- private and public subnets
+		- what users are logging in, or is it just ec2-user
+		- using bastion hosts?
+	- how are you enforcing AWS service level protection?
+		- user groups?
+		- multiple users logging into AWS management console?
+	- how are you protecting the integrity of the operating systems on your Amazon EC2 instances?
+
+(detective controls)
+can use detective controls to detect or identify a security breach
+
+aws services:
+	- aws cloudtrail
+	- cloudwatch
+	- aws config
+	- S3
+	- glacier
+
+questions:
+	- how are you capturing and analysing aws logs?
+		- is cloudwatch enabled for your region? (remember cloudwatch is region specific)
+
+(key AWS services for security)
+1. data protection
+	- encrypt in transit and at rest using: ELB, EBS, S3 and RDS
+2. privilege management
+	- IAM, MFA
+3. infra protection
+	- VPC
+4. detective controls
+	- cloudtrail, aws config, cloudwatch
+
+--------------------------------------------------------------------------------
+
+= reliability pillar =
+
+covers ability of a system to recover from service or infra outages/disruptions.
+
+(design principles)
+- test recovery procedures
+	- prove that system is going to work in any particular instance
+	- e.g. netflix and chaos engineering
+- automaticaly reccover from failure
+- scale horizontally to increase agg system availability
+- stop guessing capacity
+	- probably gonna guess wrong: either gonna under-provision (system outage) / over-provision (expensive hardware does nothing)
+
+(definition)
+reliability in cloud consists of 3 areas:
+	1. foundation
+	2. change mgmt
+	3. failure mgmt
+
+(foundations)
+make sure that you have prerequsite foundations. size of comms link between your HQ and datacenter, if you misprovision the link, can take 3-6 months to upgrade which can cause a huge disruption to your traditional IT estate.
+
+with AWS, they handle most of the foundations for you. the cloud is designed to be essentially limitless, meaning that AWS handles the networking and computing requirements.
+
+questions:
+- how are you managing aws service limits?
+- how are you planning your network topology on AWS?
+- do you have an escalation path to technical account manager?
+
+(change mgmt)
+need to be aware of how change affects a system so that you can plan proactively around it. monitoring allows you to detect any changes to your environment and react. with aws things are a lot easier, can use cloudwatch to monitor your environment and services such as autoscaling to automate change in response to changes on production env.
+
+questions:
+- how does system adapt to changes in demand
+- how are you monitoring aws resources?
+- how are you executing change management
+
+(failure mgmt)
+with cloud, you should always architect your systems with the assumptions that failure will occur. you should become aware of these failures, how they occurred, how to respond to them, and how to prevent these from happening again.
+
+questions:
+- how are you backing up your data?
+- how are you monitoring aws resources?
+- how are you executing change mgmt?
+
+(key aws services)
+1. foundations
+	- IAM, VPC
+2. change mgmt
+	- cloudtrail
+3. failure mgmt
+	- cloudformation
+	- can also use RDS multi-AZ/ backups etc
+
+
+--------------------------------------------------------------------------------
+
+= performance efficiency pillar =
+how to use computing resources efficiently to meet your requirements and how to maintain that efficiency as demand changes and technology evolves.
+
+(design principles)
+- democratize advanced technologies
+	- consume high tech solutions easily
+	- focus on product development rather than provisioning environment and setting up things
+- go global in minutes
+	- provide lower latency 
+- use serverless architecture
+- experiment more often
+
+(definition)
+1. compute
+2. storage
+3. database
+4. space-time trade-off
+
+(compute)
+important to choose right kind of server. some use heavy CPU, some use heavy memory. can change the type of the server in which your environment is running on, from t2.nano to x2.large at the click of button (or API call). can also switch to running no services, and use AWS Lambda. great thing about serverless, the costs to the business is only when someone consumes the resources. we pay for execution time. still at free tier allowance for lambda, when 1000s of people. 
+
+questions:
+- how do select appropriate instance type for your sys?
+- how do you ensure that you continue to have most appropriate instance type?
+- how do you monitor instances post launch to ensure that they are performing as expected?
+
+(storage)
+optimal storage solutions depend on:
+1. access method - block, file or object
+2. patterns - random or sequential
+3. throughput required?
+4. freq of access - online, offline or archival
+5. freq of update - worm or dynamic
+6. availability constraints
+7. durability constraints
+
+at aws storage is virtualised, can easily move volumes between diff types of storage mediums.
+
+questions:
+- how do select approrpriate storage?
+- ... ensure most appropriate?
+- monitor...
+- ensure that it matches demand
+
+(database)
+optimal database solution depends on number of factors. AWS you get a lot of options, RDS, dynamoDB, redshift etc
+
+questions:
+- how do select most appropriate DB solution for system?
+- how do ensure that continue to have most appropriate...?
+- monitor usage ...?
+- match demand ... ?
+
+(space-time trade off)
+realy things to lower latency.
+
+can use services such as RDS to add read replicas, to reduce load on DB and lower latency. can use direct connect to provide predictable latency between HQ and AWS. can use global infra to have multiple copies of your envirnment, in regions that is closest to customer base.
+
+questions:
+- how do you select appro. proximity and caching solutions?
+- how do ensure that you continue to have most appro...
+- how do you monitor ...?
+- match demand ... ?
+
+(key aws services)
+1. compute
+	- autoscaling groups
+2. storage
+	- ebs, s3, glacier
+3. db
+	- rds, dynamo, redshift
+4. space-time
+	- cloudfront, elasticache, direct connect, RDS read replicas
+
+
+--------------------------------------------------------------------------------
+
+= cost optimisation pillar =
+reduce costs to minimum and use the savings for other parts of business. cost-optimise system allows you to pay the lowest price possible while still achieving business objectives. and ACG has built the platform on serverless and passed on the costs to customers.
+
+(design principles)
+1. transparently attribute expenditure
+- cloud makes it easy to which parts are costing what
+- then can encourage those biz units to reduce cost
+
+2. use managed services to reduce cost of ownership
+- so reduce cost to manage and run
+
+3. trade capital expense for operating expense
+- instead of investing heavily in hardware
+- pay for computational resources only when you need it, and what you need
+
+4. benefit from economies of scale
+- achieve lower variable cost than you could have done on your own
+- AWS can buy and manufacture far larger than you can
+
+5. stop spending money on data center operations
+- aws focuses on racking and cabling, rather than you
+- data centers cause a large operational overhead
+
+(definition)
+1. matched supply and demand
+2. cost-effective resources
+3. expenditure awareness
+4. optimising over time
+
+(matched supply and demand)
+try to optimally align supply and demand. dont over/under provision. think of using autoscalign group or use services like Lambda. svc like cloudwatch can also help keep track as to what your demand is. huge cost adv to only pay for resources only when you need it.
+
+questions:
+- how do you make sure capacity matches but does not subst exceed what you need?
+- how are you optimising use of aws resources
+
+(cost-effective resources)
+using correce instance type can be key. t2.micro can take 7 hours to complete; but m2.large can do so much faster at 5 minutes, making it more cost effective
+
+questions:
+- have you selected teh approrpriate res type to meet your cost targets
+- have you selected the appropriate pricing model to meet your cost targets?
+- are there managed services (RDS, EBS, S3 etc) that you can use to improve your ROI?
+
+(expenditure awareness)
+dont have to get quotes on physical services, choose supplier, have those delivered installed and configured. can now provision things within seconds, however this comes with issues. many teams have their own AWS accounts. be aware of what each team is spending and this is crucial to any well architected system. use cost allocation tags to track this, billing alerts as well as consolidated billing. 
+
+questions:
+- what access controls and procedures do you have in place to govern AWS costs?
+- how are you monitoring usage and spending?
+- how do you decomm resources that you no longer need, or stop resources that are temporarily not needed?
+	- gave example of testing dev env that only runs in testing
+- how do you consider data transfer charges when designing your architecture?
+
+
+(optimising over time)
+AWS moves fast. there are hundreds of new services. the services you chose yesterday may not be best today. aurora may be better than MySQL because of performance and redundancy. should keep track of changes made to AWS and constantly re-evaluate your existing architecture. can do this by subscribing to AWS blog and by using services such as Trusted Advisor.
+
+questions:
+- how do you manage and or consider the adoption of new services?
+
+(key aws services)
+1. matched suppy and demand
+	- autoscalign
+2. cost effecitive
+	- EC2 (reserved instances), AWS Trusted Advisor
+3. expenditure awareness
+	- cloudwatch alarms, SNS
+4. optimising over time
+	- aws blog, aws trusted advisor
+
+
+--------------------------------------------------------------------------------
+
+= operational excellence pillar =
+
+this pillar is added to nov 2016.
+
+includes operational practices and procedures used to manage production workloads. includes how planned changes are executed, as well as responses to unexpected operational events.
+
+change execution and responses should be automated. all processes and procedures of operatational excellence should be documented, tested and regularly reviewed.
+
+
+(design principles)
+1. perform operations with code
+	- automating things with code
+2. align operations to business objectives
+	- collect metrics that measure biz obj are being met
+	- try to lower signal to noise ratio
+	- dont complicate things
+3. make regular, small incremental changes
+	- allow components to be updated gradually
+	- changes should be small rather than in big batches
+4. test for responsese to unexpected events
+5. learn from operational events and failures
+6. keep operations procedures current
+	- always make sure documentation is up to date
+	- and make sure that things are in good practice
+
+(definition)
+three best practice areas:
+1. preparation
+2. operation
+3. response
+
+
+(preparation)
+required to drive operational excellence. operational checeklists will ensure that workloads are ready for production, and prevent unintentional stuff.
+
+workloads should have:
+- runbooks: guidance that ops team can refer to so they can perform normal daily tasks
+- playbooks: guidance for responding to unexpected operational events. should include response plans, as well as escalation paths and stakeholder notification.
+
+several methods, services and features could be used:
+- cloudformation: used to ensure that environments contain all required resources when deployed in produciton, and taht configuration of environment is based on tested best practices, which reduces the opportunity for human error.
+- autoscaling groups: allow workloads to respond automatically when biz-related events affect operational needs
+- aws config: can create mechanisms to auto track and respond to changes
+- tagging: use taggin to make sure that all resources in workload can be identified
+
+questions:
+- what best practices for cloud ops are you using?
+- how are you doing config management for your workload?
+
+be sure that docs dont become stale or out of date. if workloads are not reviewed before production, ops will be affected when undetected issues occur. 
+
+
+(operations)
+ops should be standardized and manageable on routine basis. focus should be on automation, small frequent changes, regular QA testing and defined mechanisms to track, audit, roll back and review changes. changes should be not large and infrequent, and should not require scheduled downtime, and should not require manual execution. 
+
+can setup CI/CD pipelines. release management processes whether manual or automated, should be tested and be based on small incremental changes. 
+
+operations:
+- how are you evolving workload while minimizing impact of change?
+- how do you monitor workload that it is opering as expected?
+
+routine ops, as well as responses should be automated. manual processes should be avoided. releases should not be infrequent. use example of windows 10 (small changes frequently). 
+
+
+(responses)
+responses should be automated. alerts should be timely, and should invoke escalations when responses are not adequate. response should follow pre-defined playbook. escalation paths should be defined and include both functional and hierarchical escalation capabilities.
+
+several mechanisms to ensure:
+- SNS: can set cloudwatch alarms to trigger SNS event to alert people
+
+questions:
+- how do you respond to unplanned operational events?
+- how is escalation managed when responding to unplanned operational events?
+
+
+(key aws services)
+1. preparation:
+	- aws config
+	- aws service caalog
+2. operations:
+	- aws codecommit,codedeploy, codepipeline
+	- use AWS SDKs to automate operational changes
+	- use AWS cloudtrail to audit and track changes made to AWS environments
+3. responses:
+	- use cloudwatch and SNS combo
+
+
+--------------------------------------------------------------------------------
+
+SUMMARY!!!
+
+five pillars:
+1. security
+2. reliability
+3. performance efficiency
+4. cost optimisation
+5. operational excellence
+
+(security)
+- data protection
+- privilege mgmt
+- infra protection
+- detective controls
+
+(reliability)
+- foundations
+- change mgmt
+- failure mgmt
+
+(peformance efficiency)
+- compute
+- storage
+- database
+- space-time trade-off
+
+(cost optimisation)
+-matched supply and demand
+- cost effective resources
+- expenditure awareness
+- optimising over time
+
+(operational excellence)
+- preparation
+- operations
+- responses

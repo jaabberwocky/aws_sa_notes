@@ -1,0 +1,40 @@
+[Additional Exam Tips]
+
+this includes things from other students who have just passed.
+
+
+= kinesis =
+- fully managed service for real-time processing of streaming data at massive scale.
+- used to consume big data
+- stream large amounts of social media
+- process large amounts of data:
+	- store in redshift for BI
+	- EMR for big data processing
+
+= EC2 ebs-backed vs instance store =
+- vol is virtual HD: EBS or instance store
+- ebs: persistent (continue independently of the life of EC2)
+	- can be detached and attached to others
+	- use if you want it long-term
+- instance store: NOT persistent (ephemeral storage)
+	- cant take instance store and take put it in another EC2 instance
+	- cant be stopped, if you do this data is wiped
+	- shouldnt be used for long-term storage
+
+= opsworks =
+- orchestration service that uses Chef
+- chef consist of recipes to maintain a consistent state
+- look for keywords, terms "chef", "recipes", "cook books" think opsworks
+
+= elastic transcoder =
+- media transcoder in the cloud
+- convert media files from original format to other stuff
+- pay based on minutes you transcode and resolution at which you transcode
+
+= SWF actors =
+- workflow starters: an application that can initiate a workflow, could be your e-commerce website when placing an order
+- deciders: control the flow of activity tasks in a workflow execution, if something has finished (or fails), a Decider decides what to do next
+- activity workers: carry out the activity tasks
+
+
+

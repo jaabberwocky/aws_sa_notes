@@ -50,6 +50,34 @@ Protocol Types:
 
 SNS vs SQS:
 - both message services in AWS
+- SNS (push) SQS (pull)
+
+
+4. Elastic Transcoder 
+
+media transcoder in cloud that will convert media files into other sources. pay based on minutes that is transcoding, and resolution at which you transcode.
+
+
+5. Kinesis Services
+
+Kinesis Streams:
+- data producers -> Kinesis Streams (split into shards) -> data consumers (e.g. fleet of ec2 instances) -> s3/EMR/redshift etc
+
+Firehose:
+- data producers -> Firehose (wont hold the data) -> S3 
+- dont have to worry about anything else, like shards
+
+Analytics:
+- data producers -> analytics/firehose -> s3
+
+
+tips:
+- know difference between kinesis streams and firehose
+- understand that analytics sits on f
+
+
+
+
 
 
 
