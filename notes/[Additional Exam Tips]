@@ -40,3 +40,43 @@ this includes things from other students who have just passed.
 - curl http://169.254.169.254/latest/meta-data/
 - key thing to remember is that it's an instances' metadata, and not user data
 
+
+
+
+
+[Consolidated Billing]
+AWS organisations and consolidated billing
+
+~ what is it? ~
+is an account managment service that allows you to consolidate multiple aws accounts into an organisation that you can crete and centrally manage.
+
+available in two feature sets:
+- consolidated billing
+- all features
+
+Root accoutns, and then organisational units, map
+
+~ consolidated billing ~
+
+paying account -> linked accounts (test/dev, production ,back office) -> one monthly bill, split into each account
+
+paying account is indept and cannot access resources of other accounts, and all linked accounts are indept. currently a limit of 20 accounts.
+
+= advantages =
+- one bill per AWS account
+- very easy to track charges and allocate costs
+- volume pricing discount
+
+= other things to note =
+1. cloudtrail
+	- per AWS accoutn and is enabled per region
+	- can consolidate logs using s3 bucket
+		- turn on cloudtrail in the paying account
+		- create bucket policy for cross account ...
+
+= exam tips =
+1. consolidated billing allows you to get vol discounts on all accoutns
+2. unused reserved instances for ec2 are applied across the group.
+3. cloudtrail is on a per account and per region basis, but can be agg into a single bucket in the paying account
+
+
