@@ -36,5 +36,7 @@ this includes things from other students who have just passed.
 - deciders: control the flow of activity tasks in a workflow execution, if something has finished (or fails), a Decider decides what to do next
 - activity workers: carry out the activity tasks
 
-
+= get public IP of EC2 =
+- curl http://169.254.169.254/latest/meta-data/
+- key thing to remember is that it's an instances' metadata, and not user data
 
