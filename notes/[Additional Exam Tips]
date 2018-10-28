@@ -42,7 +42,7 @@ this includes things from other students who have just passed.
 
 
 
-
+--------------------------------------------------------------------
 
 [Consolidated Billing]
 AWS organisations and consolidated billing
@@ -78,5 +78,22 @@ paying account is indept and cannot access resources of other accounts, and all 
 1. consolidated billing allows you to get vol discounts on all accoutns
 2. unused reserved instances for ec2 are applied across the group.
 3. cloudtrail is on a per account and per region basis, but can be agg into a single bucket in the paying account
+
+
+--------------------------------------------------------------------
+
+[AWS organisations]
+
+centrally manage policies across multiple accounts
+control access
+
+
+--------------------------------------------------------------------
+
+[cross account access]
+many aws customers use separate aws accounts for their dev and prod resources. separate allows them to cleanly separate diff types of resources
+
+cross account access makes it easier to work productively. easier to switch roles in AWS management console. then can easily switch w/o having to enter password and username
+
 
 
