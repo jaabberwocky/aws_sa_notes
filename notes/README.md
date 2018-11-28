@@ -9,5 +9,8 @@
 3. Practice (udemy)
 4. Practice (whizzlabs)
 
-### Test date
-22 Nov
+## Useful sites:
+- acloudguru
+- Linux Academy
+- Whizlabs
+
