@@ -1,5 +1,9 @@
 # Revision Plan 
 
+## Contents
+* Notes (contains notes for the various sections)
+* Resources (contains misc resources for the ACG labs)
+
 ## Order
 
 1. Complete all ACG (acloudguru) videos
